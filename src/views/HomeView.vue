@@ -716,7 +716,7 @@
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
-  min-height: 200px;
+  min-height: 320px;
   border-radius: 8px;
   margin: 0;
 }
