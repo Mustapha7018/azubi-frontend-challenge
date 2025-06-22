@@ -44,6 +44,11 @@
 import { ref } from 'vue'
 import { useCartStore } from '@/stores/cart'
 
+// Define a multi-word component name to avoid the ESLint warning
+defineOptions({
+  name: 'AppHeader',
+})
+
 const cartStore = useCartStore()
 const isMenuOpen = ref(false)
 
@@ -225,7 +230,7 @@ const closeMenu = () => {
   }
 
   .nav-list a {
-    font-size: .8rem;
+    font-size: 0.8rem;
     line-height: 25px;
     color: var(--vt-c-white);
   }
@@ -248,5 +253,25 @@ const closeMenu = () => {
   .container {
     padding: 0 16px;
   }
+}
+
+/* Remove focus outlines specifically for navigation elements */
+.nav-list a:focus,
+.logo a:focus,
+.cart-button:focus,
+.menu-toggle:focus,
+button:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* Remove tap highlight on mobile */
+.nav-list a,
+.logo a,
+.cart-button,
+.menu-toggle,
+button {
+  -webkit-tap-highlight-color: transparent !important;
 }
 </style>

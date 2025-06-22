@@ -26,4 +26,16 @@ import Footer from './components/Footer.vue'
 main {
   flex: 1;
 }
+
+/* Additional focus removal for router-links and any other Vue components */
+.router-link-active:focus,
+.router-link-exact-active:focus,
+a:focus {
+  outline: none !important;
+}
+
+/* Remove mobile tap highlight */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
 </style>

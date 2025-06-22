@@ -101,32 +101,37 @@
             </div>
           </div>
 
-          <div class="product-hero reverse">
-            <div class="product-image">
-              <img
-                src="@/assets/home/desktop/image-speaker-zx7.jpg"
-                alt="ZX7 Speaker"
-                class="image"
-              />
-            </div>
-            <div class="product-content">
-              <h2 class="product-title">ZX7 Speaker</h2>
+          <!-- ZX7 Speaker Section: background image, content left -->
+          <div class="zx7-section">
+            <div class="zx7-content">
+              <h2 class="zx7-title">ZX7 Speaker</h2>
               <router-link to="/product/zx7-speaker" class="product-button outline">
                 See Product
               </router-link>
             </div>
           </div>
 
-          <div class="product-hero">
-            <div class="product-image">
-              <img
-                src="@/assets/home/desktop/image-earphones-yx1.jpg"
-                alt="YX1 Earphones"
-                class="image"
-              />
+          <!-- YX1 Earphones Section -->
+          <div class="yx1-section">
+            <div class="yx1-image">
+              <picture>
+                <source
+                  media="(max-width: 768px)"
+                  srcset="@/assets/home/mobile/image-earphones-yx1.jpg"
+                />
+                <source
+                  media="(max-width: 1024px)"
+                  srcset="@/assets/home/tablet/image-earphones-yx1.jpg"
+                />
+                <img
+                  src="@/assets/home/desktop/image-earphones-yx1.jpg"
+                  alt="YX1 Earphones"
+                  class="image"
+                />
+              </picture>
             </div>
-            <div class="product-content">
-              <h2 class="product-title">YX1 Earphones</h2>
+            <div class="yx1-content yx1-bg">
+              <h2 class="yx1-title">YX1 Earphones</h2>
               <router-link to="/product/yx1-earphones" class="product-button outline">
                 See Product
               </router-link>
@@ -178,7 +183,7 @@
   background-position: center center;
   background-size: cover;
   color: white;
-  padding: 80px 0;
+  padding: 120px 0;
   height: 75vh;
 }
 
@@ -254,6 +259,7 @@
 /* Categories Section */
 .categories {
   padding: 120px 0;
+  margin-top: 20px;
 }
 
 .category-grid {
@@ -317,7 +323,7 @@
 .product-showcase {
   display: flex;
   flex-direction: column;
-  gap: 48px;
+  gap: 50px;
 }
 
 .product-hero {
@@ -327,6 +333,7 @@
   align-items: start;
   background: var(--color-primary);
   padding: 150px 80px;
+  border-radius: 8px;
   position: relative;
   overflow: hidden;
 }
@@ -422,7 +429,7 @@
 
 .product-button.outline {
   background: transparent;
-  color: var(--color-white);
+  color: var(--color-black);
   border: 1px solid var(--vt-c-black-mute);
 }
 
@@ -453,7 +460,7 @@
 }
 
 .highlight {
-  color: var();
+  color: var(--color-primary);
 }
 
 .about-description {
@@ -471,7 +478,7 @@
 
 .about-image .image {
   max-width: 100%;
-  height: auto;
+  min-height: 300px;
 }
 
 /* Responsive Design */
@@ -481,11 +488,30 @@
     height: 640px;
     background-position: center;
   }
+
+  .categories,
+  .featured-products,
+  .about {
+    padding: 70px 0;
+  }
   .hero-content,
   .product-hero,
   .about-content {
     grid-template-columns: 1fr;
     gap: 48px;
+  }
+
+  .about-content {
+    text-align: left;
+  }
+
+  .about-image {
+    width: 100%;
+  }
+
+  .about-image .image {
+    width: 100%;
+    object-fit: cover;
   }
 
   .hero-content {
@@ -518,9 +544,24 @@
 
   .product-hero:first-child .product-content {
     padding-top: 0;
-    text-align: center;
-    padding-left: 0;
+    text-align: left;
+    padding-left: 10px;
     grid-column: auto;
+  }
+
+  .zx7-section {
+    background-image: url('@/assets/home/tablet/image-speaker-zx7.jpg');
+    min-height: 250px;
+    padding: 0;
+  }
+  .zx7-content {
+    padding: 40px 24px;
+  }
+  .yx1-section {
+    gap: 30px;
+  }
+  .yx1-content {
+    padding: 0;
   }
 }
 
@@ -536,17 +577,29 @@
   }
 
   .hero-content {
-    gap: 32px;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .hero-text {
+    align-items: center;
   }
 
   .hero-title {
     font-size: 36px;
   }
 
+  .featured-products h2 {
+    font-size: 1.5rem;
+  }
   .categories,
   .featured-products,
   .about {
-    padding: 100px 0;
+    padding: 60px 0;
+  }
+
+  .product-showcase {
+    gap: 40px;
   }
 
   .category-grid {
@@ -565,7 +618,7 @@
   }
 
   .product-hero {
-    padding: 40px 24px;
+    padding: 32px 24px;
     gap: 32px;
   }
 
@@ -575,6 +628,7 @@
 
   .product-content {
     gap: 24px;
+    padding: 0;
   }
 
   .product-title,
@@ -592,7 +646,41 @@
 
   .product-hero:first-child .product-content {
     padding-top: 0;
-    text-align: center;
+    text-align: left;
+  }
+
+  /* ZX7 Speaker for mobile */
+  .zx7-section {
+    background: url('@/assets/home/mobile/image-speaker-zx7.jpg') no-repeat;
+    background-size: cover;
+    background-position: left center;
+    min-height: 200px;
+    border-radius: 8px;
+  }
+
+  .zx7-content {
+    padding: 32px 24px;
+  }
+
+  /* YX1 Earphones for mobile */
+  .yx1-section {
+    display: block !important;
+    grid-template-columns: unset;
+  }
+
+  .yx1-image {
+    width: 100%;
+    margin-bottom: 24px;
+  }
+
+  .yx1-content {
+    width: 100%;
+    padding: 0;
+  }
+
+  .yx1-bg {
+    width: 100%;
+    padding: 32px 24px;
   }
 }
 
@@ -606,8 +694,86 @@
     font-size: 24px;
   }
 
-  .product-hero {
-    padding: 32px 16px;
+  .categories,
+  .featured-products,
+  .about {
+    padding: 50px 0;
   }
+
+  .product-showcase {
+    gap: 30px;
+  }
+
+  .product-hero {
+    padding: 32px 24px;
+  }
+}
+
+.zx7-section {
+  display: flex;
+  align-items: center;
+  background: url('@/assets/home/desktop/image-speaker-zx7.jpg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  min-height: 200px;
+  border-radius: 8px;
+  margin: 0;
+}
+.zx7-content {
+  margin-left: 0;
+  padding: 0 24px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.zx7-title {
+  color: var(--color-black);
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+  text-transform: uppercase;
+}
+
+.yx1-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: center;
+  margin: 0;
+}
+.yx1-image {
+  border-radius: 8px;
+  overflow: hidden;
+  width: 100%;
+}
+.yx1-image .image {
+  width: 100%;
+  display: block;
+  height: 100%;
+  object-fit: cover;
+}
+.yx1-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0 24px;
+  height: 100%;
+  box-sizing: border-box;
+}
+.yx1-title {
+  color: var(--color-black);
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+  text-transform: uppercase;
+}
+
+.yx1-bg {
+  background: #f1f1f1;
+  border-radius: 8px;
+  padding: 48px 24px;
 }
 </style>

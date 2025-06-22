@@ -4,7 +4,7 @@
       <div class="footer-content">
         <div class="footer-top">
           <div class="logo">
-            <img src="@/assets/logo.svg" alt="Audiophile" />
+            <h2 class="logo-text">audiophile</h2>
           </div>
 
           <nav class="footer-nav">
@@ -46,7 +46,9 @@
 </template>
 
 <script setup lang="ts">
-// No additional logic needed for footer
+defineOptions({
+  name: 'AppFooter',
+})
 </script>
 
 <style scoped>
@@ -76,8 +78,13 @@
   border-bottom: 1px solid #4c4c4c;
 }
 
-.logo img {
-  height: 25px;
+.logo-text {
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  margin: 0;
+  text-transform: lowercase;
+  letter-spacing: 1px;
 }
 
 .footer-nav-list {
@@ -162,18 +169,25 @@
   .footer-top {
     flex-direction: column;
     gap: 32px;
-    text-align: center;
+    align-items: flex-start;
+    text-align: left;
   }
 
   .footer-bottom {
     flex-direction: column;
     gap: 32px;
-    text-align: center;
+    text-align: left;
+  }
+
+  .footer-nav-list li {
+    font-size: 12px;
   }
 
   .footer-info {
-    align-items: center;
+    align-items: flex-start;
+    text-align: left;
     gap: 32px;
+    width: 100%;
   }
 }
 
@@ -188,8 +202,9 @@
   }
 
   .footer-nav-list a {
-    font-size: 24px;
-    line-height: 25px;
+    font-size: 15px;
+    font-weight: normal;
+    line-height: 20px;
   }
 }
 </style>
