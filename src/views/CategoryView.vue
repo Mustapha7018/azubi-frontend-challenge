@@ -111,9 +111,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useProductStore } from '@/stores/products'
+import { resolveImageUrl } from '@/utils/imageUtils'
 
 const route = useRoute()
 const productStore = useProductStore()
@@ -134,10 +135,19 @@ const categoryName = computed(() => {
   return categoryMap[category.value] || category.value
 })
 
-import { resolveImageUrl } from '@/utils/imageUtils'
-
 // Use the imported resolveImageUrl as getImageUrl
 const getImageUrl = resolveImageUrl
+
+onMounted(() => {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+})
+
+watch(
+  () => route.params.category,
+  () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  },
+)
 </script>
 
 <style scoped>

@@ -20,7 +20,7 @@ textarea:focus,
 [tabindex]:focus {
   outline: none !important;
   box-shadow: none !important;
-  -webkit-tap-highlight-color: transparent !important; 
+  -webkit-tap-highlight-color: transparent !important;
   -webkit-touch-callout: none !important;
   -webkit-focus-ring-color: transparent !important;
 }

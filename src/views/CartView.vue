@@ -106,7 +106,7 @@ const {
 
 import { resolveImageUrl } from '@/utils/imageUtils'
 
-// Use the imported resolveImageUrl as getImageUrl
+// ResolveImageUrl as getImageUrl
 const getImageUrl = resolveImageUrl
 </script>
 

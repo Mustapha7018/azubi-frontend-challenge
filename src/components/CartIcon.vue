@@ -15,6 +15,7 @@
 
 <script setup lang="ts">
 import { useCartStore } from '@/stores/cart'
+import { storeToRefs } from 'pinia'
 
 // Define component name to fix ESLint multi-word warning
 defineOptions({
@@ -22,7 +23,7 @@ defineOptions({
 })
 
 const cartStore = useCartStore()
-const { totalItems } = cartStore
+const { totalItems } = storeToRefs(cartStore)
 </script>
 
 <style scoped>

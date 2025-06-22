@@ -98,7 +98,7 @@ defineOptions({
 .footer-nav-list a {
   text-decoration: none;
   color: white;
-  font-weight: 700;
+  font-weight: normal;
   font-size: 13px;
   letter-spacing: 2px;
   text-transform: uppercase;

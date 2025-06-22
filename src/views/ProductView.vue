@@ -6,14 +6,6 @@
         <button @click="$router.go(-1)" class="back-link">Go Back</button>
       </div>
 
-      <!-- Notification -->
-      <div v-if="showNotification" class="notification" :class="{ show: showNotification }">
-        <div class="notification-content">
-          <div class="notification-icon">✓</div>
-          <div class="notification-text">Added to cart successfully!</div>
-        </div>
-      </div>
-
       <div class="product-details">
         <div class="product-image">
           <picture>
@@ -222,7 +214,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useProductStore } from '@/stores/products'
 import { useCartStore } from '@/stores/cart'
@@ -233,7 +225,6 @@ const productStore = useProductStore()
 const cartStore = useCartStore()
 
 const quantity = ref(1)
-const showNotification = ref(false)
 
 const product = computed(() => {
   const slug = route.params.slug as string
@@ -265,14 +256,6 @@ const addToCart = () => {
     // Add the item to cart with the current quantity
     cartStore.addToCart(cartItem)
 
-    // Show notification
-    showNotification.value = true
-
-    // Hide notification after 3 seconds
-    setTimeout(() => {
-      showNotification.value = false
-    }, 3000)
-
     // Reset quantity
     quantity.value = 1
   }
@@ -285,6 +268,16 @@ onMounted(() => {
   // Scroll to top when component mounts
   window.scrollTo(0, 0)
 })
+
+watch(
+  () => route.params.slug,
+  () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    })
+  },
+)
 </script>
 
 <style scoped>
@@ -761,13 +754,15 @@ onMounted(() => {
 
   .gallery-grid {
     height: auto;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: auto auto;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
   }
 
+  .first,
+  .second,
   .third {
-    grid-row: 3;
-    grid-column: 1 / span 2;
+    grid-column: auto;
+    grid-row: auto;
   }
 
   .you-may-also-like .section-title {
@@ -823,11 +818,17 @@ onMounted(() => {
 
 @media (max-width: 480px) {
   .add-to-cart {
-    flex-direction: column;
+    flex-direction: row;
+    gap: 8px;
   }
 
   .quantity-controls {
-    width: 100%;
+    width: auto;
+    flex-shrink: 0;
+  }
+
+  .add-to-cart-btn {
+    flex-grow: 1;
   }
 
   .container {

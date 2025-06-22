@@ -1,6 +1,6 @@
 <template>
   <div v-if="isCartOpen" class="cart-overlay" @click="closeCart">
-    <div class="cart-modal" @click.stop>
+    <div class="cart-modal" @click.stop :key="totalItems">
       <div class="cart-header">
         <h3>Cart ({{ totalItems }})</h3>
         <button class="remove-all" @click="clearCart" v-if="items.length > 0">Remove all</button>
@@ -44,6 +44,9 @@
               +
             </button>
           </div>
+          <button @click="removeFromCart(item.id)" class="remove-item-btn" aria-label="Remove item">
+            &times;
+          </button>
         </div>
       </div>
 
@@ -68,26 +71,17 @@
 
 <script setup lang="ts">
 import { useCartStore } from '@/stores/cart'
+import { storeToRefs } from 'pinia'
 
-// Define component name to fix ESLint multi-word warning
 defineOptions({
   name: 'ShoppingCart',
 })
 
 const cartStore = useCartStore()
 
-// Destructure cart store properties
-const {
-  items,
-  isCartOpen,
-  totalItems,
-  subtotal,
-  shipping,
-  total,
-  updateQuantity,
-  clearCart,
-  closeCart,
-} = cartStore
+// Destructure cart store properties, using storeToRefs for reactive state
+const { items, isCartOpen, totalItems, subtotal, shipping, total } = storeToRefs(cartStore)
+const { updateQuantity, clearCart, closeCart, removeFromCart } = cartStore
 
 // Function to shorten product names in cart
 const shortenProductName = (name: string): string => {
@@ -372,6 +366,19 @@ const getImageUrl = resolveImageUrl
 
 .checkout-btn:hover {
   background: #fbaf85;
+}
+
+.remove-item-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #7d7d7d;
+  cursor: pointer;
+  padding: 0 8px;
+  transition: color 0.2s ease;
+}
+.remove-item-btn:hover {
+  color: #d87d4a;
 }
 
 @media (max-width: 768px) {

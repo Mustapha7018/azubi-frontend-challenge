@@ -7,9 +7,7 @@ export function resolveImageUrl(path: string): string {
   if (!path) return ''
 
   // Handle image paths from data.json that start with './assets/'
-  // and convert them to the correct format for Vite
   if (path.startsWith('./assets/')) {
-    // Remove the leading './' to make it relative to the public folder
     return path.replace('./assets/', '/assets/')
   }
 

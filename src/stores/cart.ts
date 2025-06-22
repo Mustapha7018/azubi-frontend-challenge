@@ -17,7 +17,6 @@ export const useCartStore = defineStore('cart', () => {
 
   // Simple notification function
   const showNotification = (message: string, type: 'success' | 'info' = 'success') => {
-    // Create a simple notification element
     const notification = document.createElement('div')
     notification.textContent = message
     notification.style.cssText = `
@@ -109,35 +108,27 @@ export const useCartStore = defineStore('cart', () => {
     await nextTick()
   }
 
-  const removeFromCart = async (productId: number) => {
+  const removeFromCart = (productId: number) => {
     const itemToRemove = items.value.find((item) => item.id === productId)
-    items.value = [...items.value.filter((item) => item.id !== productId)]
+    items.value = items.value.filter((item) => item.id !== productId)
 
     if (itemToRemove) {
       showNotification(`${itemToRemove.name} removed from cart`, 'info')
     }
-
-    await nextTick()
   }
 
-  const updateQuantity = async (productId: number, quantity: number) => {
+  const updateQuantity = (productId: number, quantity: number) => {
     if (quantity <= 0) {
-      await removeFromCart(productId)
+      removeFromCart(productId)
       return
     }
 
-    const updatedItems = items.value.map((item) =>
-      item.id === productId ? { ...item, quantity: quantity } : item,
-    )
-
-    items.value = [...updatedItems]
-    await nextTick()
+    items.value = items.value.map((item) => (item.id === productId ? { ...item, quantity } : item))
   }
 
-  const clearCart = async () => {
+  const clearCart = () => {
     items.value = []
     showNotification('Cart cleared')
-    await nextTick()
   }
 
   const toggleCart = () => {
