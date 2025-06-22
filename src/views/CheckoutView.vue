@@ -186,7 +186,7 @@
                 <span>${{ shipping.toLocaleString() }}</span>
               </div>
               <div class="summary-row">
-                <span>VAT (Included)</span>
+                <span>VAT (20% Included)</span>
                 <span>${{ vat.toLocaleString() }}</span>
               </div>
               <div class="summary-row total">
@@ -250,7 +250,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive } from 'vue'
 import { useCartStore } from '@/stores/cart'
 
 const cartStore = useCartStore()

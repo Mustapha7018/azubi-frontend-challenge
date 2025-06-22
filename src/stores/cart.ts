@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { ref, computed, watch, nextTick } from 'vue'
+import { resolveImageUrl } from '@/utils/imageUtils'
 
 export interface CartItem {
   id: number
@@ -14,54 +15,129 @@ export const useCartStore = defineStore('cart', () => {
   const items = ref<CartItem[]>([])
   const isCartOpen = ref(false)
 
+  // Simple notification function
+  const showNotification = (message: string, type: 'success' | 'info' = 'success') => {
+    // Create a simple notification element
+    const notification = document.createElement('div')
+    notification.textContent = message
+    notification.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: ${type === 'success' ? '#4ade80' : '#60a5fa'};
+      color: white;
+      padding: 12px 16px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      z-index: 9999;
+      font-size: 14px;
+      max-width: 300px;
+      transition: opacity 0.3s ease;
+    `
+
+    document.body.appendChild(notification)
+
+    // Remove after 3 seconds
+    setTimeout(() => {
+      notification.style.opacity = '0'
+      setTimeout(() => {
+        if (document.body.contains(notification)) {
+          document.body.removeChild(notification)
+        }
+      }, 300)
+    }, 3000)
+  }
+
   // Load cart from localStorage on initialization
   const loadCart = () => {
-    const savedCart = localStorage.getItem('audiophile-cart')
-    if (savedCart) {
-      items.value = JSON.parse(savedCart)
+    try {
+      const savedCart = localStorage.getItem('audiophile-cart')
+      if (savedCart) {
+        items.value = JSON.parse(savedCart)
+      }
+    } catch (error) {
+      console.error('Failed to load cart from localStorage:', error)
+      items.value = []
     }
   }
 
   // Save cart to localStorage
   const saveCart = () => {
-    localStorage.setItem('audiophile-cart', JSON.stringify(items.value))
+    try {
+      localStorage.setItem('audiophile-cart', JSON.stringify(items.value))
+    } catch (error) {
+      console.error('Failed to save cart to localStorage:', error)
+    }
   }
 
-  // Initialize cart
   loadCart()
 
-  const addToCart = (product: Omit<CartItem, 'quantity'>) => {
+  watch(
+    items,
+    () => {
+      saveCart()
+    },
+    { deep: true, immediate: true, flush: 'post' },
+  )
+
+  const addToCart = async (product: Partial<CartItem>) => {
     const existingItem = items.value.find((item) => item.id === product.id)
+    const quantity = product.quantity || 1
 
     if (existingItem) {
-      existingItem.quantity += 1
+      const updatedItems = items.value.map((item) =>
+        item.id === product.id ? { ...item, quantity: item.quantity + quantity } : item,
+      )
+      items.value = [...updatedItems]
+      showNotification(`Added ${quantity} more ${product.name} to cart`)
     } else {
-      items.value.push({ ...product, quantity: 1 })
-    }
+      const imageUrl = product.image ? resolveImageUrl(product.image) : ''
 
-    saveCart()
-  }
-
-  const removeFromCart = (productId: number) => {
-    items.value = items.value.filter((item) => item.id !== productId)
-    saveCart()
-  }
-
-  const updateQuantity = (productId: number, quantity: number) => {
-    const item = items.value.find((item) => item.id === productId)
-    if (item) {
-      if (quantity <= 0) {
-        removeFromCart(productId)
-      } else {
-        item.quantity = quantity
-        saveCart()
+      const newItem = {
+        id: product.id!,
+        slug: product.slug!,
+        name: product.name!,
+        price: product.price!,
+        image: imageUrl,
+        quantity: quantity,
       }
+
+      items.value = [...items.value, newItem]
+      showNotification(`${product.name} added to cart`)
     }
+
+    await nextTick()
   }
 
-  const clearCart = () => {
+  const removeFromCart = async (productId: number) => {
+    const itemToRemove = items.value.find((item) => item.id === productId)
+    items.value = [...items.value.filter((item) => item.id !== productId)]
+
+    if (itemToRemove) {
+      showNotification(`${itemToRemove.name} removed from cart`, 'info')
+    }
+
+    await nextTick()
+  }
+
+  const updateQuantity = async (productId: number, quantity: number) => {
+    if (quantity <= 0) {
+      await removeFromCart(productId)
+      return
+    }
+
+    const updatedItems = items.value.map((item) =>
+      item.id === productId ? { ...item, quantity: quantity } : item,
+    )
+
+    items.value = [...updatedItems]
+    await nextTick()
+  }
+
+  const clearCart = async () => {
     items.value = []
-    saveCart()
+    showNotification('Cart cleared')
+    await nextTick()
   }
 
   const toggleCart = () => {
@@ -72,7 +148,6 @@ export const useCartStore = defineStore('cart', () => {
     isCartOpen.value = false
   }
 
-  // Computed properties
   const totalItems = computed(() => {
     return items.value.reduce((total, item) => total + item.quantity, 0)
   })

@@ -18,10 +18,7 @@
         </nav>
 
         <div class="header-actions">
-          <button class="cart-button" @click="toggleCart" aria-label="Open cart">
-            <img src="@/assets/shared/desktop/icon-cart.svg" alt="Cart" />
-            <span v-if="totalItems > 0" class="cart-badge">{{ totalItems }}</span>
-          </button>
+          <CartIcon />
 
           <button
             class="menu-toggle"
@@ -42,17 +39,14 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useCartStore } from '@/stores/cart'
+import CartIcon from '@/components/CartIcon.vue'
 
 // Define a multi-word component name to avoid the ESLint warning
 defineOptions({
   name: 'AppHeader',
 })
 
-const cartStore = useCartStore()
 const isMenuOpen = ref(false)
-
-const { totalItems, toggleCart } = cartStore
 
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value
@@ -139,36 +133,6 @@ const closeMenu = () => {
   display: flex;
   align-items: center;
   gap: 16px;
-}
-
-.cart-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  position: relative;
-  padding: 8px;
-}
-
-.cart-button img {
-  width: 23px;
-  height: 20px;
-  color: var(--color-white);
-}
-
-.cart-badge {
-  position: absolute;
-  top: 0;
-  right: 0;
-  background: #d87d4a;
-  color: var(--color-white);
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  font-weight: 700;
 }
 
 .menu-toggle {
